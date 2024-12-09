@@ -10,6 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -17,26 +20,44 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author 2dami
  */
 @Entity
+@Table(name="accounts", schema="bank")
+@NamedQueries({
+    @NamedQuery(name="findByAllAccounts",
+            query="SELECT * FROM Accounts")
+})
 @XmlRootElement
 public class Accounts implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String accountNumber;
+    
+    private Integer balance;
 
-    public Long getId() {
-        return id;
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public Integer getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Integer balance) {
+        this.balance = balance;
+    }
+    
+    public String getaccountNumber() {
+        return accountNumber;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (accountNumber != null ? accountNumber.hashCode() : 0);
         return hash;
     }
 
@@ -47,7 +68,7 @@ public class Accounts implements Serializable {
             return false;
         }
         Accounts other = (Accounts) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.accountNumber == null && other.accountNumber != null) || (this.accountNumber != null && !this.accountNumber.equals(other.accountNumber))) {
             return false;
         }
         return true;
@@ -55,7 +76,7 @@ public class Accounts implements Serializable {
 
     @Override
     public String toString() {
-        return "com.tartanga.grupo4.accounts.Accounts[ id=" + id + " ]";
+        return "com.tartanga.grupo4.accounts.Accounts[ id=" + accountNumber + " ]";
     }
     
 }
