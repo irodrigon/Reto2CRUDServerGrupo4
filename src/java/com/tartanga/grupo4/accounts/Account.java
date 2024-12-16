@@ -5,6 +5,7 @@
  */
 package com.tartanga.grupo4.accounts;
 
+import com.tartanga.grupo4.creditcards.CreditCard;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import com.tartanga.grupo4.product.Product;
+import java.util.List;
+import static javax.persistence.CascadeType.ALL;
+import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -36,6 +41,13 @@ public class Account extends Product implements Serializable {
     private Long accountNumber;
     
     private Double balance;
+    
+    @OneToMany(cascade=ALL, mappedBy="account")
+    private List<CreditCard> creditCardList;
+    
+    public Account(){
+    
+    }
 
     public Long getAccountNumber() {
         return accountNumber;
@@ -52,8 +64,16 @@ public class Account extends Product implements Serializable {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
-    
 
+    @XmlTransient
+    public List<CreditCard> getCreditCardList() {
+        return creditCardList;
+    }
+
+    public void setCreditCardList(List<CreditCard> creditCardList) {
+        this.creditCardList = creditCardList;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

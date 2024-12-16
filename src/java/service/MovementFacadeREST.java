@@ -5,7 +5,7 @@
  */
 package service;
 
-import com.tartanga.grupo4.accounts.Account;
+import com.tartanga.grupo4.creditcards.Movement;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -25,54 +25,54 @@ import javax.ws.rs.core.MediaType;
  * @author Iñi
  */
 @Stateless
-@Path("com.tartanga.grupo4.accounts.account")
-public class AccountFacadeREST extends AbstractFacade<Account> {
+@Path("com.tartanga.grupo4.creditcards.movement")
+public class MovementFacadeREST extends AbstractFacade<Movement> {
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
     private EntityManager em;
 
-    public AccountFacadeREST() {
-        super(Account.class);
+    public MovementFacadeREST() {
+        super(Movement.class);
     }
 
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Account entity) {
+    public void create(Movement entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, Account entity) {
+    public void edit(@PathParam("id") Long id, Movement entity) {
         super.edit(entity);
     }
 
     @DELETE
     @Path("{id}")
-    public void remove(@PathParam("id") Integer id) {
+    public void remove(@PathParam("id") Long id) {
         super.remove(super.find(id));
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Account find(@PathParam("id") Integer id) {
+    public Movement find(@PathParam("id") Long id) {
         return super.find(id);
     }
 
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Account> findAll() {
+    public List<Movement> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Account> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<Movement> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 

@@ -5,7 +5,7 @@
  */
 package service;
 
-import com.tartanga.grupo4.accounts.Account;
+import com.tartanga.grupo4.creditcards.CreditCard;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -25,27 +25,27 @@ import javax.ws.rs.core.MediaType;
  * @author Iñi
  */
 @Stateless
-@Path("com.tartanga.grupo4.accounts.account")
-public class AccountFacadeREST extends AbstractFacade<Account> {
+@Path("com.tartanga.grupo4.creditcards.creditcard")
+public class CreditCardFacadeREST extends AbstractFacade<CreditCard> {
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
     private EntityManager em;
 
-    public AccountFacadeREST() {
-        super(Account.class);
+    public CreditCardFacadeREST() {
+        super(CreditCard.class);
     }
 
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Account entity) {
+    public void create(CreditCard entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, Account entity) {
+    public void edit(@PathParam("id") Integer id, CreditCard entity) {
         super.edit(entity);
     }
 
@@ -58,21 +58,21 @@ public class AccountFacadeREST extends AbstractFacade<Account> {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Account find(@PathParam("id") Integer id) {
+    public CreditCard find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Account> findAll() {
+    public List<CreditCard> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Account> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<CreditCard> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 
