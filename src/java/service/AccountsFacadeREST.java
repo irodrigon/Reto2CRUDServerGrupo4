@@ -5,7 +5,7 @@
  */
 package service;
 
-import com.tartange.grupo4.product.Product;
+import com.tartanga.grupo4.accounts.Accounts;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -25,54 +25,54 @@ import javax.ws.rs.core.MediaType;
  * @author 2dami
  */
 @Stateless
-@Path("com.tartange.grupo4.product.product")
-public class ProductFacadeREST extends AbstractFacade<Product> {
+@Path("com.tartanga.grupo4.accounts.accounts")
+public class AccountsFacadeREST extends AbstractFacade<Accounts> {
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
     private EntityManager em;
 
-    public ProductFacadeREST() {
-        super(Product.class);
+    public AccountsFacadeREST() {
+        super(Accounts.class);
     }
 
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Product entity) {
+    public void create(Accounts entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, Product entity) {
+    public void edit(@PathParam("id") Long id, Accounts entity) {
         super.edit(entity);
     }
 
     @DELETE
     @Path("{id}")
-    public void remove(@PathParam("id") Integer id) {
+    public void remove(@PathParam("id") Long id) {
         super.remove(super.find(id));
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Product find(@PathParam("id") Integer id) {
+    public Accounts find(@PathParam("id") Long id) {
         return super.find(id);
     }
 
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Product> findAll() {
+    public List<Accounts> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Product> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<Accounts> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 
