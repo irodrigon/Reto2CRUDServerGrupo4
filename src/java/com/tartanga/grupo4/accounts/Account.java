@@ -6,6 +6,7 @@
 package com.tartanga.grupo4.accounts;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,45 +15,44 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import com.tartanga.grupo4.product.Product;
 
 /**
  *
  * @author 2dami
  */
 @Entity
-@Table(name="accounts", schema="bank")
+@Table(name="account", schema="rovobankDB")
 @NamedQueries({
-    @NamedQuery(name="findByAllAccounts",
-            query="SELECT * FROM Accounts")
+    @NamedQuery(name="getAllAccounts",
+            query="SELECT u FROM Account u")
 })
 @XmlRootElement
-public class Accounts implements Serializable {
+public class Account extends Product implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private String accountNumber;
     
-    private Integer balance;
+    @Column(unique = true)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long accountNumber;
+    
+    private Double balance;
 
-    public String getAccountNumber() {
+    public Long getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(String accountNumber) {
+    public void setAccountNumber(Long accountNumber) {
         this.accountNumber = accountNumber;
     }
 
-    public Integer getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(Integer balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
     
-    public String getaccountNumber() {
-        return accountNumber;
-    }
 
     @Override
     public int hashCode() {
@@ -64,10 +64,10 @@ public class Accounts implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Accounts)) {
+        if (!(object instanceof Account)) {
             return false;
         }
-        Accounts other = (Accounts) object;
+        Account other = (Account) object;
         if ((this.accountNumber == null && other.accountNumber != null) || (this.accountNumber != null && !this.accountNumber.equals(other.accountNumber))) {
             return false;
         }
