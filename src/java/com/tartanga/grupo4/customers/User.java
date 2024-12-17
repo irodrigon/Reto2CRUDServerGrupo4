@@ -7,50 +7,36 @@ package com.tartanga.grupo4.customers;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
-
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 /**
- *
- * @author Iñi
+ * @author rabio
  */
 @MappedSuperclass
 public class User implements Serializable {
-
+  
+    public User(){};
     private static final long serialVersionUID = 1L;
     
+    
     @Id
-    private Long IDUser;
-    
-    private String username;
-    
+    private String logIn;
+
     private String name;
-    
     private String surname;
-    
     private String street;
-    
     private String city;
-    
     private Integer zip;
-    
-    public User(){}
 
-    public Long getIDUser() {
-        return IDUser;
+    public String getLogIn() {
+        return logIn;
     }
 
-    public void setIDUser(Long IDUser) {
-        this.IDUser = IDUser;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setLogIn(String logIn) {
+        this.logIn = logIn;
     }
 
     public String getName() {
@@ -84,19 +70,19 @@ public class User implements Serializable {
     public void setCity(String city) {
         this.city = city;
     }
-
-    public Integer getZip() {
+    public int getZip() {
         return zip;
     }
 
-    public void setZip(Integer zip) {
+    public void setZip(int zip) {
         this.zip = zip;
     }
 
+    
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (IDUser != null ? IDUser.hashCode() : 0);
+        hash += (logIn != null ? logIn.hashCode() : 0);
         return hash;
     }
 
@@ -107,7 +93,7 @@ public class User implements Serializable {
             return false;
         }
         User other = (User) object;
-        if ((this.IDUser == null && other.IDUser != null) || (this.IDUser != null && !this.IDUser.equals(other.IDUser))) {
+        if ((this.logIn == null && other.logIn != null) || (this.logIn != null && !this.logIn.equals(other.logIn))) {
             return false;
         }
         return true;
@@ -115,7 +101,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "com.tartanga.grupo4.customers.User[ id=" + IDUser + " ]";
+        return "com.tartanga.grupo4.customers.User[ id=" + logIn + " ]";
     }
     
 }

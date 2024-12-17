@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,6 +6,8 @@
  */
 package com.tartanga.grupo4.accounts;
 
+
+import com.tartanga.grupo4.customers.Customer;
 import com.tartanga.grupo4.creditcards.CreditCard;
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -17,6 +20,11 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import com.tartanga.grupo4.product.Product;
+import java.util.Set;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import java.util.List;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.OneToMany;
@@ -63,6 +71,20 @@ public class Account extends Product implements Serializable {
 
     public void setBalance(Double balance) {
         this.balance = balance;
+    }
+    
+    //relaciones
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="customer_account",schema="rovobankDB", joinColumns = @JoinColumn(name="IDProduct", referencedColumnName = "IDProduct"),
+                inverseJoinColumns = @JoinColumn(name="logIn",referencedColumnName = "logIn"))
+    private Set<Customer> customers;
+
+    public Set<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(Set<Customer> customers) {
+        this.customers = customers;
     }
 
     @XmlTransient
