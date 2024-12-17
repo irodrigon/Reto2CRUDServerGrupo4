@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,7 +6,9 @@
  */
 package com.tartanga.grupo4.accounts;
 
+
 import com.tartanga.grupo4.customers.Customer;
+import com.tartanga.grupo4.creditcards.CreditCard;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,6 +25,10 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import java.util.List;
+import static javax.persistence.CascadeType.ALL;
+import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -42,6 +49,13 @@ public class Account extends Product implements Serializable {
     private Long accountNumber;
     
     private Double balance;
+    
+    @OneToMany(cascade=ALL, mappedBy="account")
+    private List<CreditCard> creditCardList;
+    
+    public Account(){
+    
+    }
 
     public Long getAccountNumber() {
         return accountNumber;
@@ -59,7 +73,6 @@ public class Account extends Product implements Serializable {
         this.balance = balance;
     }
     
-    
     //relaciones
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="customer_account",schema="rovobankDB", joinColumns = @JoinColumn(name="IDProduct", referencedColumnName = "IDProduct"),
@@ -74,9 +87,14 @@ public class Account extends Product implements Serializable {
         this.customers = customers;
     }
 
-    
-    
-    
+    @XmlTransient
+    public List<CreditCard> getCreditCardList() {
+        return creditCardList;
+    }
+
+    public void setCreditCardList(List<CreditCard> creditCardList) {
+        this.creditCardList = creditCardList;
+    }
     
     @Override
     public int hashCode() {

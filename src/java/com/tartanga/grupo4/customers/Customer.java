@@ -5,6 +5,7 @@
  */
 package com.tartanga.grupo4.customers;
 
+
 import com.tartanga.grupo4.accounts.Account;
 import java.io.Serializable;
 import java.util.Set;
@@ -16,6 +17,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -25,6 +32,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "customer", schema = "rovobankDB")
+ * @author Iñi
+ */
+@Entity
+@Table(name="Customer", schema="rovobankdb")
 @XmlRootElement
 public class Customer extends User implements Serializable {
 
@@ -61,6 +72,39 @@ public class Customer extends User implements Serializable {
         this.accounts = accounts;
     }
 
+    
+    private Long IDCustomer;
+    
+    private String dni;
+    
+    private String phone;
+    
+    
+    public Customer(){}
+
+    public Long getIDCustomer() {
+        return IDCustomer;
+    }
+
+    public void setIDCustomer(Long IDCustomer) {
+        this.IDCustomer = IDCustomer;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
     
     
     

@@ -13,12 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 /**
- *
  * @author rabio
  */
 @MappedSuperclass
 public class User implements Serializable {
-
+  
     public User(){};
     private static final long serialVersionUID = 1L;
     
@@ -71,7 +70,6 @@ public class User implements Serializable {
     public void setCity(String city) {
         this.city = city;
     }
-
     public int getZip() {
         return zip;
     }
