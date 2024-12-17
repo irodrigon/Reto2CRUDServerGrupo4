@@ -10,7 +10,7 @@ import javax.ws.rs.core.Application;
 
 /**
  *
- * @author egure
+ * @author 2dami
  */
 @javax.ws.rs.ApplicationPath("webresources")
 public class ApplicationConfig extends Application {
@@ -30,6 +30,12 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(service.LoanFacadeREST.class);
+        resources.add(service.TransfersFacadeREST.class);
+        resources.add(service.AccountFacadeREST.class);
+        resources.add(service.AdminFacadeREST.class);
+        resources.add(service.CreditCardFacadeREST.class);
+        resources.add(service.CustomerFacadeREST.class);
+        resources.add(service.MovementFacadeREST.class);
     }
     
 }
