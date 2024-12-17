@@ -6,28 +6,24 @@
  */
 package com.tartanga.grupo4.accounts;
 
-
-import com.tartanga.grupo4.customers.Customer;
 import com.tartanga.grupo4.creditcards.CreditCard;
+import com.tartanga.grupo4.customers.Customer;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import com.tartanga.grupo4.product.Product;
-import java.util.Set;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import java.util.Date;
 import java.util.List;
 import static javax.persistence.CascadeType.ALL;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -35,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author 2dami
  */
 @Entity
-@Table(name="account", schema="rovobankDB")
+@Table(name="account", schema ="rovobankdb")
 @NamedQueries({
     @NamedQuery(name="getAllAccounts",
             query="SELECT u FROM Account u")
@@ -50,11 +46,15 @@ public class Account extends Product implements Serializable {
     
     private Double balance;
     
+    @Temporal(TemporalType.DATE) 
+    @Column(name="creation_date", insertable=false, updatable=false) 
+    protected Date creationDate = super.creationDate;
+    
+
     @OneToMany(cascade=ALL, mappedBy="account")
     private List<CreditCard> creditCardList;
-    
-    public Account(){
-    
+
+    public Account() {
     }
 
     public Long getAccountNumber() {
@@ -72,9 +72,19 @@ public class Account extends Product implements Serializable {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    
     
     //relaciones
-    @ManyToMany(fetch = FetchType.EAGER)
+    /*@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="customer_account",schema="rovobankDB", joinColumns = @JoinColumn(name="IDProduct", referencedColumnName = "IDProduct"),
                 inverseJoinColumns = @JoinColumn(name="logIn",referencedColumnName = "logIn"))
     private Set<Customer> customers;
@@ -85,7 +95,7 @@ public class Account extends Product implements Serializable {
 
     public void setCustomers(Set<Customer> customers) {
         this.customers = customers;
-    }
+    }*/
 
     @XmlTransient
     public List<CreditCard> getCreditCardList() {

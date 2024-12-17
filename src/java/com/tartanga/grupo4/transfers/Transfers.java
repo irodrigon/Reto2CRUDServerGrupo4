@@ -5,8 +5,8 @@
  */
 package com.tartanga.grupo4.transfers;
 
+import com.tartanga.grupo4.enums.Currency;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -45,8 +45,9 @@ public class Transfers implements Serializable {
     private Date transferDate;
     
     private Integer Amount;
-    @Enumerated(EnumType.ORDINAL)
-    private moneyType type;
+    
+    @Enumerated(EnumType.STRING)
+    private Currency currency;
     
     public Transfers(){
         this.transferId=0;
@@ -54,15 +55,15 @@ public class Transfers implements Serializable {
         this.reciever="";
         this.transferDate=null;
         this.Amount=0;
-        this.type=moneyType.Euro;
+        this.currency=Currency.EURO;
     }
-    public Transfers(Integer transferId,String sender,String reciever,Date transferDate,Integer Amount,moneyType type){
+    public Transfers(Integer transferId,String sender,String reciever,Date transferDate,Integer Amount,Currency currency){
         this.transferId=transferId;
         this.sender=sender;
         this.reciever=reciever;
         this.transferDate=transferDate;
         this.Amount=Amount;
-        this.type=type;
+        this.currency = currency;
     }
 
     public Integer getTransferId() {
@@ -105,13 +106,15 @@ public class Transfers implements Serializable {
         this.Amount = Amount;
     }
 
-    public moneyType getType() {
-        return type;
+    public Currency getCurrency() {
+        return currency;
     }
 
-    public void setType(moneyType type) {
-        this.type = type;
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
+
+  
     
     @Override
     public int hashCode() {

@@ -1,9 +1,14 @@
 package com.tartanga.grupo4.loans;
 
+import com.tartanga.grupo4.product.Product;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -15,11 +20,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name="Loans",schema="RovoBankdb")
 @XmlRootElement
-public class Loan implements Serializable {
+public class Loan extends Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
     private Long loanId;
     private Integer interest;
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -78,7 +82,7 @@ public class Loan implements Serializable {
     public void setPeriod(Integer period) {
         this.period = period;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;

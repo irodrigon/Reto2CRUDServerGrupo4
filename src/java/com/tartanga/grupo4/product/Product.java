@@ -5,32 +5,51 @@
  */
 package com.tartanga.grupo4.product;
 
+import com.tartanga.grupo4.accounts.Account;
+import com.tartanga.grupo4.creditcards.CreditCard;
+import com.tartanga.grupo4.customers.Customer;
+import com.tartanga.grupo4.loans.Loan;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author rabio
  */
-@MappedSuperclass
+@Entity
+@Table(name="Product", schema="rovobankdb")
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Product implements Serializable {
-
-    public Product(){};
     
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer IDProduct;
-
+    protected Integer IDProduct;
     
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date creationDate;
+    @Column(name="creation_date")
+    @Temporal(TemporalType.DATE)
+    protected Date creationDate;
+    
+    @ManyToMany(mappedBy="products", fetch = FetchType.LAZY)
+    protected List<Customer> customers;
+    
+    public Product(){
+        this.creationDate = new Date();
+    }
 
     public Integer getIDProduct() {
         return IDProduct;
@@ -40,8 +59,6 @@ public class Product implements Serializable {
         this.IDProduct = IDProduct;
     }
 
-    
-
     public Date getCreationDate() {
         return creationDate;
     }
@@ -50,7 +67,13 @@ public class Product implements Serializable {
         this.creationDate = creationDate;
     }
 
-    
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
+    }
     
     @Override
     public int hashCode() {
