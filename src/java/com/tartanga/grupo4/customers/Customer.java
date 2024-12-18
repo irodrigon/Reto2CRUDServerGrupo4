@@ -24,6 +24,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -73,6 +74,7 @@ public class Customer extends User implements Serializable {
         this.accounts = accounts;
     }*/
 
+    @XmlTransient
     public List<Product> getProducts() {
         return products;
     }

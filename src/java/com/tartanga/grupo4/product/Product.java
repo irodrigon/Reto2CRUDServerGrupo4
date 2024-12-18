@@ -24,6 +24,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -32,6 +34,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name="Product", schema="rovobankdb")
 @Inheritance(strategy=InheritanceType.JOINED)
+@XmlRootElement
 public class Product implements Serializable {
     
     private static final long serialVersionUID = 1L;
@@ -67,6 +70,7 @@ public class Product implements Serializable {
         this.creationDate = creationDate;
     }
 
+    @XmlTransient
     public List<Customer> getCustomers() {
         return customers;
     }

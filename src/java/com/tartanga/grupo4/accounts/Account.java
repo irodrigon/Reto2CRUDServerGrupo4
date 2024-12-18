@@ -16,6 +16,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import com.tartanga.grupo4.product.Product;
+import com.tartanga.grupo4.transfers.Transfers;
 import java.util.Date;
 import java.util.List;
 import static javax.persistence.CascadeType.ALL;
@@ -47,14 +48,21 @@ public class Account extends Product implements Serializable {
     private Double balance;
     
     @Temporal(TemporalType.DATE) 
-    @Column(name="creation_date", insertable=false, updatable=false) 
-    protected Date creationDate = super.creationDate;
+    @Column(name="creation_date", insertable=true, updatable=true) 
+    protected Date creationDate;
     
 
     @OneToMany(cascade=ALL, mappedBy="account")
     private List<CreditCard> creditCardList;
+    
+    @OneToMany(cascade=ALL, mappedBy = "sourceAccount")  
+    private List<Transfers> outgoingTransfers;
+    
+    @OneToMany(cascade=ALL, mappedBy = "destinationAccount")  
+    private List<Transfers> incomingTransfers;
 
     public Account() {
+        this.creationDate = super.creationDate;
     }
 
     public Long getAccountNumber() {
@@ -73,15 +81,33 @@ public class Account extends Product implements Serializable {
         this.balance = balance;
     }
 
+    @Override
     public Date getCreationDate() {
         return creationDate;
     }
 
+    @Override
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
-    
-    
+
+    @XmlTransient
+    public List<Transfers> getOutgoingTransfers() {
+        return outgoingTransfers;
+    }
+
+    public void setOutgoingTransfers(List<Transfers> outgoingTransfers) {
+        this.outgoingTransfers = outgoingTransfers;
+    }
+
+    @XmlTransient
+    public List<Transfers> getIncomingTransfers() {
+        return incomingTransfers;
+    }
+
+    public void setIncomingTransfers(List<Transfers> incomingTransfers) {
+        this.incomingTransfers = incomingTransfers;
+    }
     
     //relaciones
     /*@ManyToMany(fetch = FetchType.EAGER)

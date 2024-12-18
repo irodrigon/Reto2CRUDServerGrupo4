@@ -3,14 +3,11 @@ package com.tartanga.grupo4.loans;
 import com.tartanga.grupo4.product.Product;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -25,6 +22,9 @@ public class Loan extends Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long loanId;
+    @Temporal(TemporalType.DATE) 
+    @Column(name="creation_date", insertable=true, updatable=true) 
+    protected Date creationDate;
     private Integer interest;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date startDate;
@@ -32,6 +32,10 @@ public class Loan extends Product implements Serializable {
     private Date endDate;
     private Double amount;
     private Integer period;
+    
+    public Loan(){
+        this.creationDate = super.creationDate;
+    }
 
     // Getters y Setters
 
@@ -81,6 +85,16 @@ public class Loan extends Product implements Serializable {
 
     public void setPeriod(Integer period) {
         this.period = period;
+    }
+
+    @Override
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    @Override
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
     
     @Override

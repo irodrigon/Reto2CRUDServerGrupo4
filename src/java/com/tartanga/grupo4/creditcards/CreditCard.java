@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import static javax.persistence.CascadeType.ALL;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -21,6 +22,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -37,6 +39,10 @@ public class CreditCard extends Product implements Serializable {
     
     private Long creditCardNumber;
     
+    @Temporal(TemporalType.DATE) 
+    @Column(name="creation_date", insertable=true, updatable=true) 
+    protected Date creationDate;
+    
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date expirationDate;
     
@@ -51,7 +57,7 @@ public class CreditCard extends Product implements Serializable {
     private List<Movement> movementList;
     
     public CreditCard(){
-    
+        this.creationDate = super.creationDate;
     }
 
     public Long getCreditCardNumber() {
@@ -102,6 +108,18 @@ public class CreditCard extends Product implements Serializable {
     public void setMovementList(List<Movement> movementList) {
         this.movementList = movementList;
     }
+
+    @Override
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    @Override
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+    
+    
 
     @Override
     public int hashCode() {

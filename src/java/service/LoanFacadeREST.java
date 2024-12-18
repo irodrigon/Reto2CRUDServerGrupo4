@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author egure
+ * @author Iñi
  */
 @Stateless
 @Path("com.tartanga.grupo4.loans.loan")
@@ -45,20 +45,20 @@ public class LoanFacadeREST extends AbstractFacade<Loan> {
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, Loan entity) {
+    public void edit(@PathParam("id") Integer id, Loan entity) {
         super.edit(entity);
     }
 
     @DELETE
     @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
+    public void remove(@PathParam("id") Integer id) {
         super.remove(super.find(id));
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Loan find(@PathParam("id") Long id) {
+    public Loan find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 

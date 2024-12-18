@@ -45,20 +45,20 @@ public class AdminFacadeREST extends AbstractFacade<Admin> {
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, Admin entity) {
+    public void edit(@PathParam("id") String id, Admin entity) {
         super.edit(entity);
     }
 
     @DELETE
     @Path("{id}")
-    public void remove(@PathParam("id") Long id) {
+    public void remove(@PathParam("id") String id) {
         super.remove(super.find(id));
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Admin find(@PathParam("id") Long id) {
+    public Admin find(@PathParam("id") String id) {
         return super.find(id);
     }
 

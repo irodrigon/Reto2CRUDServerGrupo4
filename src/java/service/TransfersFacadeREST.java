@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author Alin
+ * @author Iñi
  */
 @Stateless
 @Path("com.tartanga.grupo4.transfers.transfers")

@@ -5,6 +5,7 @@
  */
 package com.tartanga.grupo4.transfers;
 
+import com.tartanga.grupo4.accounts.Account;
 import com.tartanga.grupo4.enums.Currency;
 import java.io.Serializable;
 import java.util.Date;
@@ -14,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -48,6 +50,12 @@ public class Transfers implements Serializable {
     
     @Enumerated(EnumType.STRING)
     private Currency currency;
+    
+    @ManyToOne
+    private Account sourceAccount;
+
+    @ManyToOne
+    private Account destinationAccount;
     
     public Transfers(){
         this.transferId=0;
@@ -114,7 +122,21 @@ public class Transfers implements Serializable {
         this.currency = currency;
     }
 
-  
+    public Account getSourceAccount() {
+        return sourceAccount;
+    }
+
+    public void setSourceAccount(Account sourceAccount) {
+        this.sourceAccount = sourceAccount;
+    }
+
+    public Account getDestinationAccount() {
+        return destinationAccount;
+    }
+
+    public void setDestinationAccount(Account destinationAccount) {
+        this.destinationAccount = destinationAccount;
+    }
     
     @Override
     public int hashCode() {
