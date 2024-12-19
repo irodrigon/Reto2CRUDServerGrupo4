@@ -22,6 +22,8 @@ import javax.persistence.ManyToMany;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -32,6 +34,13 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "customer", schema = "rovobankDB")
+@NamedQueries({
+   @NamedQuery(name = "findCustomerByNameSurname", query = "SELECT c FROM Customer c WHERE "
+          + "(:name IS NOT NULL AND :surname IS NOT NULL AND c.name LIKE :name AND c.surname LIKE :surname) OR "
+          + "(:name IS NOT NULL AND :surname IS NULL AND c.name LIKE :name) OR "
+          + "(:name IS NULL AND :surname IS NOT NULL AND c.surname LIKE :surname)"
+)         
+})
 @XmlRootElement
 public class Customer extends User implements Serializable {
 

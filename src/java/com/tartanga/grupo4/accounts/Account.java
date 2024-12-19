@@ -34,8 +34,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name="account", schema ="rovobankdb")
 @NamedQueries({
-    @NamedQuery(name="getAllAccounts",
-            query="SELECT u FROM Account u")
+    @NamedQuery(name="getAllAccounts",query="SELECT u FROM Account u"),
+    @NamedQuery(name="findByAccountNumber", query="SELECT a FROM Account a WHERE a.accountNumber = :accountNumber"),
+    @NamedQuery(name="findByDates", query="SELECT a FROM Account a WHERE a.creationDate BETWEEN :startDate AND :endDate")
+            
 })
 @XmlRootElement
 public class Account extends Product implements Serializable {
