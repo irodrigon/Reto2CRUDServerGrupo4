@@ -8,7 +8,7 @@ package service;
 import com.tartanga.grupo4.accounts.Account;
 import com.tartanga.grupo4.customers.Customer;
 import com.tartanga.grupo4.exceptions.ReadException;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -99,14 +99,13 @@ public class AccountFacadeREST extends AbstractFacade<Account> {
     @GET
     @Path("byAccountNumber/{accountNumber}")
     @Produces({"application/xml"})
-    @Override
     public Account findByAccount(@PathParam("accountNumber") Long accountNumber) {
         Account account = null;
 
         try {
             LOGGER.log(Level.INFO, "AccountFacadeREST: find account by accounNumber={0}.", accountNumber);
-            account = super.findByAccount(accountNumber);
-        } catch (ReadException e) {
+            account = (Account) em.createNamedQuery("findByAccountNumber", Account.class).setParameter("accountNumber", accountNumber).getSingleResult();
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "AccountFacadeREST: Exception reading account by accountNumber, {0}", e.getMessage());
             throw new InternalServerErrorException(e);
         }
@@ -117,14 +116,14 @@ public class AccountFacadeREST extends AbstractFacade<Account> {
     @GET
     @Path("byDates/{startDate}/{endDate}")
     @Produces({"application/xml"})
-    @Override
-    public List<Account> findByDates(@PathParam("startDate") Date startDate, @PathParam("endDate") Date endDate){
+    public List<Account> findByDates(@PathParam("startDate") String startDate, @PathParam("endDate") String endDate){
         List<Account> accounts= null;
         
         try{
+            
             LOGGER.log(Level.INFO, "AccountFacadeREST: find account by startDate={0} and endDate={1}.", new Object[]{startDate, endDate});
-            accounts = super.findByDates(startDate, endDate);
-        }catch(ReadException e){
+            accounts = em.createNamedQuery("findByDates",Account.class).setParameter("startDate", Date.valueOf(startDate)).setParameter("endDate", Date.valueOf(endDate)).getResultList();
+        }catch(Exception e){
             LOGGER.log(Level.SEVERE, "AccountFacadeREST: Exception reading accounts by creation_dates, {0}", e.getMessage());
             throw new InternalServerErrorException(e);
         }
@@ -132,25 +131,50 @@ public class AccountFacadeREST extends AbstractFacade<Account> {
     }
     
     @GET
-    @Path("namesSurname/{name}/{surname}")
+    @Path("byNameSurname/{name}/{surname}")
     @Produces({"application/xml"})
-    @Override
     public List<Customer> findByNameSurname(@PathParam("name") String name, @PathParam("surname") String surname){
         List<Customer> customers= null;
         
         try{
-            if(name.isEmpty()){
-                name = null;
-            }
-            if(surname.isEmpty()){
-                surname = null;
-            }
             System.out.println(name);
             System.out.println(surname);
-            LOGGER.log(Level.INFO, "AccountFacadeREST: find customer by name={0} and/or surname={1}.", new Object[]{name, surname});
-            customers = super.findByNameSurname(name, surname);
-        }catch(ReadException e){
-            LOGGER.log(Level.SEVERE, "AccountFacadeREST: Exception reading customers by name and/or surname, {0}", e.getMessage());
+            LOGGER.log(Level.INFO, "AccountFacadeREST: find customer by name={0} and surname={1}.", new Object[]{name, surname});
+            customers = em.createNamedQuery("findCustomerByNameSurname", Customer.class).setParameter("name", name).setParameter("surname", surname).getResultList();
+        }catch(Exception e){
+            LOGGER.log(Level.SEVERE, "AccountFacadeREST: Exception reading customers by name and surname, {0}", e.getMessage());
+            throw new InternalServerErrorException(e);
+        }
+        return customers;
+    }
+    
+    @GET
+    @Path("byName/{name}")
+    @Produces({"application/xml"})
+    public List<Customer> findByName(@PathParam("name") String name){
+        List<Customer> customers= null;
+        
+        try{
+            LOGGER.log(Level.INFO, "AccountFacadeREST: find customer by name={0}.", name);
+            customers = em.createNamedQuery("findCustomerByName", Customer.class).setParameter("name", name).getResultList();
+        }catch(Exception e){
+            LOGGER.log(Level.SEVERE, "AccountFacadeREST: Exception reading customers by name, {0}", e.getMessage());
+            throw new InternalServerErrorException(e);
+        }
+        return customers;
+    }
+    
+    @GET
+    @Path("bySurname/{surname}")
+    @Produces({"application/xml"})
+    public List<Customer> findBySurname(@PathParam("surname") String surname){
+        List<Customer> customers= null;
+        
+        try{
+            LOGGER.log(Level.INFO, "AccountFacadeREST: find customer by surname={0}.", surname);
+            customers = em.createNamedQuery("findCustomerBySurname", Customer.class).setParameter("surname", surname).getResultList();
+        }catch(Exception e){
+            LOGGER.log(Level.SEVERE, "AccountFacadeREST: Exception reading customers by surname, {0}", e.getMessage());
             throw new InternalServerErrorException(e);
         }
         return customers;

@@ -35,11 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "customer", schema = "rovobankDB")
 @NamedQueries({
-   @NamedQuery(name = "findCustomerByNameSurname", query = "SELECT c FROM Customer c WHERE "
-          + "(:name IS NOT NULL AND :surname IS NOT NULL AND c.name LIKE :name AND c.surname LIKE :surname) OR "
-          + "(:name IS NOT NULL AND :surname IS NULL AND c.name LIKE :name) OR "
-          + "(:name IS NULL AND :surname IS NOT NULL AND c.surname LIKE :surname)"
-)         
+   @NamedQuery(name = "findCustomerByNameSurname", query = "SELECT c FROM Customer c WHERE c.name = :name and c.surname = :surname"),
+   @NamedQuery(name = "findCustomerByName",        query = "SELECT c FROM Customer c WHERE c.name = :name"),
+   @NamedQuery(name = "findCustomerBySurname",     query = "SELECT c FROM Customer c WHERE c.surname = :surname")
 })
 @XmlRootElement
 public class Customer extends User implements Serializable {
