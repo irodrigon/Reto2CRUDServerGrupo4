@@ -6,13 +6,17 @@
 package service;
 
 import com.tartanga.grupo4.accounts.Account;
+import com.tartanga.grupo4.exceptions.CreateException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -27,6 +31,8 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 @Path("com.tartanga.grupo4.accounts.account")
 public class AccountFacadeREST extends AbstractFacade<Account> {
+    
+    private static final Logger logger = Logger.getLogger(AccountFacadeREST.class.getName());
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
     private EntityManager em;
@@ -39,7 +45,13 @@ public class AccountFacadeREST extends AbstractFacade<Account> {
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Account entity) {
-        super.create(entity);
+         try {
+            logger.log(Level.INFO, "AccountFacadeREST: Creating account {0}.", entity);
+            super.create(entity);
+        } catch (CreateException ex) {
+            logger.log(Level.SEVERE, "AccountFacadeREST: Exception creating account: {0}", ex.getMessage());
+            throw new InternalServerErrorException("Account creation failed: " + ex.getMessage());
+        }
     }
 
     @PUT

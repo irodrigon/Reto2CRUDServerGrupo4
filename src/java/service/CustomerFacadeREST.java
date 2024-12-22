@@ -6,13 +6,17 @@
 package service;
 
 import com.tartanga.grupo4.customers.Customer;
+import com.tartanga.grupo4.exceptions.CreateException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -27,6 +31,8 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 @Path("com.tartanga.grupo4.customers.customer")
 public class CustomerFacadeREST extends AbstractFacade<Customer> {
+    
+    private static final Logger logger = Logger.getLogger(CustomerFacadeREST.class.getName());
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
     private EntityManager em;
@@ -39,7 +45,13 @@ public class CustomerFacadeREST extends AbstractFacade<Customer> {
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Customer entity) {
-        super.create(entity);
+        try {
+            logger.log(Level.INFO, "CustomerFacadeREST: Creating customer {0}.", entity);
+            super.create(entity);
+        } catch (CreateException ex) {
+            logger.log(Level.SEVERE, "CustomerFacadeREST: Exception creating customer: {0}", ex.getMessage());
+            throw new InternalServerErrorException("Customer creation failed: " + ex.getMessage());
+        }
     }
 
     @PUT

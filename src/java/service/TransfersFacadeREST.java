@@ -5,14 +5,18 @@
  */
 package service;
 
+import com.tartanga.grupo4.exceptions.CreateException;
 import com.tartanga.grupo4.transfers.Transfers;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -27,6 +31,8 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 @Path("com.tartanga.grupo4.transfers.transfers")
 public class TransfersFacadeREST extends AbstractFacade<Transfers> {
+    
+    private static final Logger logger = Logger.getLogger(TransfersFacadeREST.class.getName());
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
     private EntityManager em;
@@ -39,7 +45,13 @@ public class TransfersFacadeREST extends AbstractFacade<Transfers> {
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Transfers entity) {
-        super.create(entity);
+        try {
+            logger.log(Level.INFO, "TransfersFacadeREST: Creating transfer {0}.", entity);
+            super.create(entity);
+        } catch (CreateException ex) {
+            logger.log(Level.SEVERE, "TransfersFacadeREST: Exception creating transfer: {0}", ex.getMessage());
+            throw new InternalServerErrorException("Transfer creation failed: " + ex.getMessage());
+        }
     }
 
     @PUT

@@ -5,14 +5,18 @@
  */
 package service;
 
+import com.tartanga.grupo4.exceptions.CreateException;
 import com.tartanga.grupo4.product.Product;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -27,6 +31,8 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 @Path("com.tartanga.grupo4.product.product")
 public class ProductFacadeREST extends AbstractFacade<Product> {
+    
+    private static final Logger logger = Logger.getLogger(ProductFacadeREST.class.getName());
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
     private EntityManager em;
@@ -39,7 +45,13 @@ public class ProductFacadeREST extends AbstractFacade<Product> {
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Product entity) {
-        super.create(entity);
+        try {
+            logger.log(Level.INFO, "ProductFacadeREST: Creating product {0}.", entity);
+            super.create(entity);
+        } catch (CreateException ex) {
+            logger.log(Level.SEVERE, "ProductFacadeREST: Exception creating product: {0}", ex.getMessage());
+            throw new InternalServerErrorException("Product creation failed: " + ex.getMessage());
+        }
     }
 
     @PUT

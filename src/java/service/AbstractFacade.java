@@ -5,6 +5,7 @@
  */
 package service;
 
+import com.tartanga.grupo4.exceptions.CreateException;
 import java.util.List;
 import javax.persistence.EntityManager;
 
@@ -22,8 +23,12 @@ public abstract class AbstractFacade<T> {
 
     protected abstract EntityManager getEntityManager();
 
-    public void create(T entity) {
-        getEntityManager().persist(entity);
+    public void create(T entity) throws CreateException{
+        try{
+            getEntityManager().persist(entity);
+        }catch(Exception e){
+             throw new CreateException(e.getMessage());
+        }
     }
 
     public void edit(T entity) {
