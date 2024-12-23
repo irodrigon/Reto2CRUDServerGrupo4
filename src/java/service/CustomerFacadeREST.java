@@ -32,7 +32,6 @@ import javax.ws.rs.core.MediaType;
 @Path("com.tartanga.grupo4.customers.customer")
 public class CustomerFacadeREST extends AbstractFacade<Customer> {
     
-    private static final Logger logger = Logger.getLogger(CustomerFacadeREST.class.getName());
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
     private EntityManager em;
@@ -45,13 +44,7 @@ public class CustomerFacadeREST extends AbstractFacade<Customer> {
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Customer entity) {
-        try {
-            logger.log(Level.INFO, "CustomerFacadeREST: Creating customer {0}.", entity);
-            super.create(entity);
-        } catch (CreateException ex) {
-            logger.log(Level.SEVERE, "CustomerFacadeREST: Exception creating customer: {0}", ex.getMessage());
-            throw new InternalServerErrorException("Customer creation failed: " + ex.getMessage());
-        }
+        super.create(entity);
     }
 
     @PUT

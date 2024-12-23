@@ -32,7 +32,6 @@ import javax.ws.rs.core.MediaType;
 @Path("com.tartanga.grupo4.product.product")
 public class ProductFacadeREST extends AbstractFacade<Product> {
     
-    private static final Logger logger = Logger.getLogger(ProductFacadeREST.class.getName());
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
     private EntityManager em;
@@ -45,13 +44,7 @@ public class ProductFacadeREST extends AbstractFacade<Product> {
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Product entity) {
-        try {
-            logger.log(Level.INFO, "ProductFacadeREST: Creating product {0}.", entity);
-            super.create(entity);
-        } catch (CreateException ex) {
-            logger.log(Level.SEVERE, "ProductFacadeREST: Exception creating product: {0}", ex.getMessage());
-            throw new InternalServerErrorException("Product creation failed: " + ex.getMessage());
-        }
+        super.create(entity);
     }
 
     @PUT

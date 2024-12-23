@@ -32,7 +32,6 @@ import javax.ws.rs.core.MediaType;
 @Path("com.tartanga.grupo4.transfers.transfers")
 public class TransfersFacadeREST extends AbstractFacade<Transfers> {
     
-    private static final Logger logger = Logger.getLogger(TransfersFacadeREST.class.getName());
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
     private EntityManager em;
@@ -45,13 +44,7 @@ public class TransfersFacadeREST extends AbstractFacade<Transfers> {
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Transfers entity) {
-        try {
-            logger.log(Level.INFO, "TransfersFacadeREST: Creating transfer {0}.", entity);
-            super.create(entity);
-        } catch (CreateException ex) {
-            logger.log(Level.SEVERE, "TransfersFacadeREST: Exception creating transfer: {0}", ex.getMessage());
-            throw new InternalServerErrorException("Transfer creation failed: " + ex.getMessage());
-        }
+        super.create(entity);
     }
 
     @PUT

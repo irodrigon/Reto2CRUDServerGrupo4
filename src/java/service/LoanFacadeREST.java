@@ -32,7 +32,6 @@ import javax.ws.rs.core.MediaType;
 @Path("com.tartanga.grupo4.loans.loan")
 public class LoanFacadeREST extends AbstractFacade<Loan> {
     
-    private static final Logger logger = Logger.getLogger(LoanFacadeREST.class.getName());
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
     private EntityManager em;
@@ -45,13 +44,7 @@ public class LoanFacadeREST extends AbstractFacade<Loan> {
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Loan entity) {
-        try {
-            logger.log(Level.INFO, "LoanFacadeREST: Creating loan {0}.", entity);
             super.create(entity);
-        } catch (CreateException ex) {
-            logger.log(Level.SEVERE, "LoanFacadeREST: Exception creating loan: {0}", ex.getMessage());
-            throw new InternalServerErrorException("Loan creation failed: " + ex.getMessage());
-        }
     }
 
     @PUT

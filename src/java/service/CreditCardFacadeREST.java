@@ -24,6 +24,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+
 /**
  *
  * @author Iñi
@@ -48,7 +49,7 @@ public class CreditCardFacadeREST extends AbstractFacade<CreditCard> {
         try {
             logger.log(Level.INFO, "CreditCardFacadeREST: Creating credit card {0}.", entity);
             super.create(entity);
-        } catch (CreateException ex) {
+        }catch(Exception ex){
             logger.log(Level.SEVERE, "CreditCardFacadeREST: Exception creating credit card: {0}", ex.getMessage());
             throw new InternalServerErrorException("Credit card creation failed: " + ex.getMessage());
         }
@@ -58,13 +59,26 @@ public class CreditCardFacadeREST extends AbstractFacade<CreditCard> {
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Integer id, CreditCard entity) {
-        super.edit(entity);
+        try {
+            logger.log(Level.INFO, "CreditCardFacadeREST: Updating credit card {0}.", entity);
+            super.edit(entity);
+        }catch(Exception ex){
+            logger.log(Level.SEVERE, "CreditCardFacadeREST: Exception updating credit card: {0}", ex.getMessage());
+            throw new InternalServerErrorException("Credit card editing failed: " + ex.getMessage());
+        }
     }
 
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Integer id) {
-        super.remove(super.find(id));
+          try {
+            logger.log(Level.INFO, "CreditCardFacadeREST: Deleting credit card {0}.", id);
+            super.remove(super.find(id));
+          }catch(Exception ex){
+            logger.log(Level.SEVERE, "CreditCardFacadeREST: Exception deleting credit card: {0}", ex.getMessage());
+            throw new InternalServerErrorException("Credit card deleting failed: " + ex.getMessage());
+        }
+          
     }
 
     @GET

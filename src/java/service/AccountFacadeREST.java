@@ -32,7 +32,6 @@ import javax.ws.rs.core.MediaType;
 @Path("com.tartanga.grupo4.accounts.account")
 public class AccountFacadeREST extends AbstractFacade<Account> {
     
-    private static final Logger logger = Logger.getLogger(AccountFacadeREST.class.getName());
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
     private EntityManager em;
@@ -45,13 +44,7 @@ public class AccountFacadeREST extends AbstractFacade<Account> {
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Account entity) {
-         try {
-            logger.log(Level.INFO, "AccountFacadeREST: Creating account {0}.", entity);
-            super.create(entity);
-        } catch (CreateException ex) {
-            logger.log(Level.SEVERE, "AccountFacadeREST: Exception creating account: {0}", ex.getMessage());
-            throw new InternalServerErrorException("Account creation failed: " + ex.getMessage());
-        }
+        super.create(entity);
     }
 
     @PUT

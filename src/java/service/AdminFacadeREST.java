@@ -32,7 +32,6 @@ import javax.ws.rs.core.MediaType;
 @Path("com.tartanga.grupo4.customers.admin")
 public class AdminFacadeREST extends AbstractFacade<Admin> {
     
-    private static final Logger logger = Logger.getLogger(AdminFacadeREST.class.getName());
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
     private EntityManager em;
@@ -45,13 +44,7 @@ public class AdminFacadeREST extends AbstractFacade<Admin> {
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Admin entity) {
-        try {
-            logger.log(Level.INFO, "AdminFacadeREST: Creating admin {0}.", entity);
-            super.create(entity);
-        } catch (CreateException ex) {
-            logger.log(Level.SEVERE, "AdminFacadeREST: Exception creating admin: {0}", ex.getMessage());
-            throw new InternalServerErrorException("Admin creation failed: " + ex.getMessage());
-        }
+        super.create(entity);
     }
 
     @PUT

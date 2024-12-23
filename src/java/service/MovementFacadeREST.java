@@ -48,7 +48,7 @@ public class MovementFacadeREST extends AbstractFacade<Movement> {
         try {
             logger.log(Level.INFO, "MovementFacadeREST: Creating movement {0}.", entity);
             super.create(entity);
-        } catch (CreateException ex) {
+        } catch (Exception ex) {
             logger.log(Level.SEVERE, "MovementFacadeREST: Exception creating movement: {0}", ex.getMessage());
             throw new InternalServerErrorException("Movement creation failed: " + ex.getMessage());
         }
@@ -58,13 +58,25 @@ public class MovementFacadeREST extends AbstractFacade<Movement> {
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Long id, Movement entity) {
-        super.edit(entity);
+        try {
+            logger.log(Level.INFO, "MovementFacadeREST: Updating movement {0}.", entity);
+            super.edit(entity);
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, "MovementFacadeREST: Exception updating movement: {0}", ex.getMessage());
+            throw new InternalServerErrorException("Movement editing failed: " + ex.getMessage());
+        }
     }
 
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
+        try {
+            logger.log(Level.INFO, "MovementFacadeREST: Deleting movement {0}.", id);
+            super.remove(super.find(id));
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, "MovementFacadeREST: Exception deleting movement: {0}", ex.getMessage());
+            throw new InternalServerErrorException("Movement deleting failed: " + ex.getMessage());
+        }
     }
 
     @GET
