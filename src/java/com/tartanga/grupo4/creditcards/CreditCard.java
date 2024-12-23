@@ -13,12 +13,9 @@ import java.util.List;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -31,7 +28,21 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Iñi
  */
 @Entity
-@Table(name="Credit_card",schema="rovobankdb")
+@Table(name="CreditCard",schema="rovobankdb")
+@NamedQueries({
+    @NamedQuery(
+           name="findCreditCardByCreditCardNumber",
+           query="SELECT c FROM CreditCard c WHERE c.creditCardNumber = :creditCardNumber"
+    ),
+    @NamedQuery(
+            name="findCreditCardByCreationDate",
+            query="SELECT c FROM CreditCard c WHERE c.creationDate BETWEEN :startDate AND :endDate"
+    ),
+    @NamedQuery(
+            name="findCreditCardByExpirationDate",
+            query="SELECT c FROM CreditCard c WHERE c.expirationDate BETWEEN :startDate AND :endDate"
+    )
+})
 @XmlRootElement
 public class CreditCard extends Product implements Serializable {
 

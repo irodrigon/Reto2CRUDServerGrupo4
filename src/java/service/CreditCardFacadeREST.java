@@ -6,7 +6,9 @@
 package service;
 
 import com.tartanga.grupo4.creditcards.CreditCard;
-import com.tartanga.grupo4.exceptions.CreateException;
+import com.tartanga.grupo4.exceptions.ReadException;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -114,4 +116,57 @@ public class CreditCardFacadeREST extends AbstractFacade<CreditCard> {
         return em;
     }
     
+    @GET
+    @Path("creditCardNumber/{creditCardNumber}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<CreditCard> findCreditCardByCreditCardNumber(@PathParam("creditCardNumber") Long creditCardNumber) throws ReadException{
+        
+        List<CreditCard> creditCardData = new ArrayList<>();
+        
+        try{
+            logger.log(Level.INFO, "CreditCardFacadeREST: Reading credit card data.");
+            creditCardData = em.createNamedQuery("findCreditCardByCreditCardNumber").setParameter("creditCardNumber", creditCardNumber).getResultList();
+        }catch(Exception e){
+            logger.log(Level.SEVERE, "CreditCardFacadeREST: Exception returning credit card data: ", e.getMessage());
+            throw new ReadException(e.getMessage());
+        }
+        
+        return creditCardData;
+    }
+    
+    @GET
+    @Path("creationDates/{startDate}/{endDate}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<CreditCard> findCreditCardByCreationDate(@PathParam("startDate") String startDate, @PathParam("endDate") String endDate) throws ReadException{
+        
+        List<CreditCard> creditCardData = new ArrayList<>();
+        
+        try{
+            logger.log(Level.INFO, "CreditCardFacadeREST: Reading data by creation date.");
+            creditCardData = em.createNamedQuery("findCreditCardByCreationDate").setParameter("startDate",Date.valueOf(startDate)).setParameter("endDate",Date.valueOf(endDate)).getResultList();
+        }catch(Exception e){
+            logger.log(Level.SEVERE, "CreditCardFacadeREST: Exception reading data by creation date: ", e.getMessage());
+            throw new ReadException(e.getMessage());
+        }
+        
+        return creditCardData;
+    }
+    
+    @GET
+    @Path("expirationDates/{startDate}/{endDate}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<CreditCard> findCreditCardByexpirationDate(@PathParam("startDate") String startDate, @PathParam("endDate") String endDate) throws ReadException{
+        
+        List<CreditCard> creditCardData = new ArrayList<>();
+        
+        try{
+            logger.log(Level.INFO, "CreditCardFacadeREST: Reading data by expiration date.");
+            creditCardData = em.createNamedQuery("findCreditCardByExpirationDate").setParameter("startDate",Date.valueOf(startDate)).setParameter("endDate",Date.valueOf(endDate)).getResultList();
+        }catch(Exception e){
+            logger.log(Level.SEVERE, "CreditCardFacadeREST: Exception reading data by expiration date: ", e.getMessage());
+            throw new ReadException(e.getMessage());
+        }
+        
+        return creditCardData;
+    }
 }
