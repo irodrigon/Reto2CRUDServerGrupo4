@@ -28,7 +28,7 @@ import javax.ws.rs.InternalServerErrorException;
 
 /**
  *
- * @author Iñi
+ * @author Aitor
  */
 @Stateless
 @Path("com.tartanga.grupo4.accounts.account")
@@ -43,12 +43,12 @@ public class AccountFacadeREST extends AbstractFacade<Account> {
         super(Account.class);
     }
 
-    @POST
+   /* @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Account entity) {
         super.create(entity);
-    }
+    }*/
 
     @PUT
     @Path("{id}")
@@ -137,8 +137,6 @@ public class AccountFacadeREST extends AbstractFacade<Account> {
         List<Customer> customers= null;
         
         try{
-            System.out.println(name);
-            System.out.println(surname);
             LOGGER.log(Level.INFO, "AccountFacadeREST: find customer by name={0} and surname={1}.", new Object[]{name, surname});
             customers = em.createNamedQuery("findCustomerByNameSurname", Customer.class).setParameter("name", name).setParameter("surname", surname).getResultList();
         }catch(Exception e){
@@ -179,4 +177,19 @@ public class AccountFacadeREST extends AbstractFacade<Account> {
         }
         return customers;
     }
+    
+    @POST
+    @Consumes({"application/xml"})
+    public void createAccount(Account account){
+        LOGGER.log(Level.INFO, "AccountFacadeREST: Creating a new account");
+        try{
+            em.persist(account);
+            LOGGER.log(Level.INFO, "AccountFacadeREST: Account created");
+        }catch(Exception e){
+            LOGGER.log(Level.SEVERE, "UserManager: Exception creating user.{0}",
+                    e.getMessage());
+            throw new InternalServerErrorException(e.getMessage());
+        }
+    }
+    
 }
