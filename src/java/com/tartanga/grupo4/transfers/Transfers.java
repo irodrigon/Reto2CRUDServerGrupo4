@@ -28,10 +28,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Alin
  */
 @Entity
-@Table(name="transfer", schema="rovobankDB")
+@Table(name="transfers", schema="rovobankDB")
 @NamedQueries({
-    @NamedQuery(name="findByAll",
-            query="Select t from Transfers t")
+    @NamedQuery(name="findByAll", query="Select t from Transfers t"),
+    @NamedQuery(name="findBySender", query="Select t from Transfers t where t.sender=:sender"),
+    @NamedQuery(name="findByReciever", query="Select t from Transfers t where t.reciever=:reciever"),
+    @NamedQuery(name="findByID", query="Select t from Transfers t where t.transferId=:transferId"),
+    @NamedQuery(name="findByDate", query="Select t from Transfers t where t.transferDate BETWEEN :startDate AND :endDate")
 })
 @XmlRootElement
 public class Transfers implements Serializable {
