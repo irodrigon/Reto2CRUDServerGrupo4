@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -56,8 +57,9 @@ public class Customer extends User implements Serializable {
         this.telephone = telephone;
     }
     
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="customer_product", schema="rovobankdb",joinColumns =  @JoinColumn(name="dni", referencedColumnName="dni"), 
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="customer_product", schema="rovobankdb",joinColumns =  @JoinColumn(name="logIn", referencedColumnName="logIn"), 
             inverseJoinColumns = @JoinColumn(name="IDProduct", referencedColumnName="IDProduct"))
     private List<Product> products;
     
@@ -74,7 +76,7 @@ public class Customer extends User implements Serializable {
         this.accounts = accounts;
     }*/
 
-    @XmlTransient
+    @XmlElement
     public List<Product> getProducts() {
         return products;
     }

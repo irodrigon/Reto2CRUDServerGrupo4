@@ -3,11 +3,7 @@ package com.tartanga.grupo4.loans;
 import com.tartanga.grupo4.product.Product;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -15,30 +11,50 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author egure
  */
 @Entity
-@Table(name="Loans",schema="RovoBankdb")
+@Table(name = "loans", schema = "rovobankdb")
+@NamedQueries({
+    @NamedQuery(name = "getBalanceByRemaining", query = "SELECT l FROM Loan l WHERE l.amount > :balance"),
+    @NamedQuery(name = "getLoansByInterestRate", query = "SELECT l FROM Loan l WHERE l.interest = :interestRate"),
+    @NamedQuery(name = "findByDates", query = "SELECT l FROM Loan l WHERE l.startDate >= :startDate AND l.endDate <= :endDate"),
+    @NamedQuery(name = "getByUser", query = "SELECT l FROM Customer l WHERE l.logIn = :logIn")
+})
 @XmlRootElement
 public class Loan extends Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+  
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "loan_id") 
     private Long loanId;
-    @Temporal(TemporalType.DATE) 
-    @Column(name="creation_date", insertable=true, updatable=true) 
-    protected Date creationDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "creation_date", nullable = false, insertable = true, updatable = true)
+    private Date creationDate;
+
+    @Column(name = "interest", nullable = false)
     private Integer interest;
-    @Temporal(javax.persistence.TemporalType.DATE)
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "start_date", nullable = false)
     private Date startDate;
-    @Temporal(javax.persistence.TemporalType.DATE)
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "end_date", nullable = false)
     private Date endDate;
+
+    @Column(name = "amount", nullable = false)
     private Double amount;
+
+    @Column(name = "period", nullable = false)
     private Integer period;
-    
-    public Loan(){
-        this.creationDate = super.creationDate;
+
+    // Constructor predeterminado
+    public Loan() {
+        this.creationDate = super.getCreationDate();
     }
 
     // Getters y Setters
-
     public Long getLoanId() {
         return loanId;
     }
@@ -96,7 +112,8 @@ public class Loan extends Product implements Serializable {
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
-    
+
+    // Métodos estándar de hashCode, equals y toString
     @Override
     public int hashCode() {
         int hash = 0;
@@ -106,15 +123,11 @@ public class Loan extends Product implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the loanId fields are not set
         if (!(object instanceof Loan)) {
             return false;
         }
         Loan other = (Loan) object;
-        if ((this.loanId == null && other.loanId != null) || (this.loanId != null && !this.loanId.equals(other.loanId))) {
-            return false;
-        }
-        return true;
+        return (this.loanId != null || other.loanId == null) && (this.loanId == null || this.loanId.equals(other.loanId));
     }
 
     @Override
