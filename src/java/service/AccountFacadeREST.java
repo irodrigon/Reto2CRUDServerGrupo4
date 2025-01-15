@@ -99,7 +99,7 @@ public class AccountFacadeREST extends AbstractFacade<Account> {
     @GET
     @Path("byAccountNumber/{accountNumber}")
     @Produces({"application/xml"})
-    public Account findByAccount(@PathParam("accountNumber") Long accountNumber) {
+    public Account findByAccount(@PathParam("accountNumber") String accountNumber) {
         Account account = null;
 
         try {
