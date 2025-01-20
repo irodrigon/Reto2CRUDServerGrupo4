@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "getBalanceByRemaining", query = "SELECT l FROM Loan l WHERE l.amount > :balance"),
     @NamedQuery(name = "getLoansByInterestRate", query = "SELECT l FROM Loan l WHERE l.interest <= :interestRate"),
-    @NamedQuery(name = "findByDates", query = "SELECT l FROM Loan l WHERE l.endDate >= :startDate AND l.endDate <= :endDate"),
+    @NamedQuery(name = "findByDatesLoan", query = "SELECT l FROM Loan l WHERE l.endDate >= :startDate AND l.endDate <= :endDate"),
 })
 @XmlRootElement
 public class Loan extends Product implements Serializable {

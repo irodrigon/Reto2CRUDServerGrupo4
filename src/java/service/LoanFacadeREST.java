@@ -141,7 +141,7 @@ public class LoanFacadeREST extends AbstractFacade<Loan> {
           try{
             
             LOGGER.log(Level.INFO, "LoanFacadeREST: Getting loans which  startDate={0} and endDate={1}.", new Object[]{startDate, endDate});
-            loansDates = em.createNamedQuery("findByDates", Loan.class).setParameter("startDate", Date.valueOf(startDate)).setParameter("endDate", Date.valueOf(endDate)).getResultList();
+            loansDates = em.createNamedQuery("findByDatesLoan", Loan.class).setParameter("startDate", Date.valueOf(startDate)).setParameter("endDate", Date.valueOf(endDate)).getResultList();
         }catch(Exception e){
             LOGGER.log(Level.SEVERE, "LoanFacadeREST: Exception reading loanss by creation dates between {0} and {0}", new Object[]{startDate, endDate});
             throw new InternalServerErrorException(e);
