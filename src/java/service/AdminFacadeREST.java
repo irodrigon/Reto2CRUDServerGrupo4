@@ -5,14 +5,22 @@
  */
 package service;
 
+import com.tartanga.grupo4.creditcards.CreditCard;
 import com.tartanga.grupo4.customers.Admin;
+import com.tartanga.grupo4.exceptions.CreateException;
+import com.tartanga.grupo4.exceptions.ReadException;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -27,6 +35,9 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 @Path("com.tartanga.grupo4.customers.admin")
 public class AdminFacadeREST extends AbstractFacade<Admin> {
+    
+    
+    private static final Logger logger = Logger.getLogger(AdminFacadeREST.class.getName());
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
     private EntityManager em;
@@ -81,6 +92,42 @@ public class AdminFacadeREST extends AbstractFacade<Admin> {
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
         return String.valueOf(super.count());
+    }
+    
+    @GET
+    @Path("credentials/{logIn}/{password}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Admin findAdminByCredentials(@PathParam("logIn") String logIn, @PathParam("password") String password) throws ReadException{
+        
+        Admin admin = new Admin();
+        
+        try{
+            logger.log(Level.INFO, "AdminFacadeREST: Searching data by logIn and password.");
+            admin = (Admin) em.createNamedQuery("findAdminByCredentials").setParameter("logIn",logIn).setParameter("password",password).getSingleResult();
+        }catch(Exception e){
+            logger.log(Level.SEVERE, "AdminFacadeREST: Exception reading data by logIn and password: ", e.getMessage());
+            throw new ReadException(e.getMessage());
+        }
+        
+        return admin;
+    }
+    
+    @GET
+    @Path("credentials/{logIn}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Admin countAdminByLogin(@PathParam("logIn") String logIn) throws ReadException{
+        
+        Admin admin = new Admin();
+        
+        try{
+            logger.log(Level.INFO, "AdminFacadeREST: Searching data by logIn and password.");
+            admin = (Admin) em.createNamedQuery("countAdminByLogin").setParameter("logIn",logIn).getSingleResult();
+        }catch(Exception e){
+            logger.log(Level.SEVERE, "AdminFacadeREST: Exception reading data by logIn and password: ", e.getMessage());
+            throw new ReadException(e.getMessage());
+        }
+        
+        return admin;
     }
 
     @Override
