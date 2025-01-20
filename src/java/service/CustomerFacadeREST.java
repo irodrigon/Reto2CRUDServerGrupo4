@@ -6,13 +6,17 @@
 package service;
 
 import com.tartanga.grupo4.customers.Customer;
+import com.tartanga.grupo4.exceptions.CreateException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -27,6 +31,7 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 @Path("com.tartanga.grupo4.customers.customer")
 public class CustomerFacadeREST extends AbstractFacade<Customer> {
+    
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
     private EntityManager em;

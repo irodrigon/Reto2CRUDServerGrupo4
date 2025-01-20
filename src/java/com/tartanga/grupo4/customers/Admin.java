@@ -7,6 +7,8 @@ package com.tartanga.grupo4.customers;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -16,6 +18,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name="Admin", schema="rovobankdb")
+@NamedQueries({
+    @NamedQuery(
+            name="findAdminByCredentials",
+            query="SELECT a from Admin a WHERE logIn = :logIn AND password = :password"
+    ),
+    @NamedQuery(
+            name="countAdminByLogin",
+            query="SELECT a FROM Admin a WHERE (SELECT COUNT(a) FROM Admin a WHERE logIn = :logIn) > 0"
+    )
+})
 @XmlRootElement
 public class Admin extends User implements Serializable {
 

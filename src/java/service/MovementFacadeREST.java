@@ -6,13 +6,17 @@
 package service;
 
 import com.tartanga.grupo4.creditcards.Movement;
+import com.tartanga.grupo4.exceptions.CreateException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -27,6 +31,8 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 @Path("com.tartanga.grupo4.creditcards.movement")
 public class MovementFacadeREST extends AbstractFacade<Movement> {
+    
+    private static final Logger logger = Logger.getLogger(MovementFacadeREST.class.getName());
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
     private EntityManager em;
@@ -39,20 +45,38 @@ public class MovementFacadeREST extends AbstractFacade<Movement> {
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Movement entity) {
-        super.create(entity);
+        try {
+            logger.log(Level.INFO, "MovementFacadeREST: Creating movement {0}.", entity);
+            super.create(entity);
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, "MovementFacadeREST: Exception creating movement: {0}", ex.getMessage());
+            throw new InternalServerErrorException("Movement creation failed: " + ex.getMessage());
+        }
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Long id, Movement entity) {
-        super.edit(entity);
+        try {
+            logger.log(Level.INFO, "MovementFacadeREST: Updating movement {0}.", entity);
+            super.edit(entity);
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, "MovementFacadeREST: Exception updating movement: {0}", ex.getMessage());
+            throw new InternalServerErrorException("Movement editing failed: " + ex.getMessage());
+        }
     }
 
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
+        try {
+            logger.log(Level.INFO, "MovementFacadeREST: Deleting movement {0}.", id);
+            super.remove(super.find(id));
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, "MovementFacadeREST: Exception deleting movement: {0}", ex.getMessage());
+            throw new InternalServerErrorException("Movement deleting failed: " + ex.getMessage());
+        }
     }
 
     @GET
