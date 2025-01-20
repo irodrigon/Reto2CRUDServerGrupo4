@@ -36,9 +36,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "customer", schema = "rovobankDB")
 @NamedQueries({
+   @NamedQuery(name = "getByUser", query = "SELECT l FROM Customer l WHERE l.logIn = :logIn"),
    @NamedQuery(name = "findCustomerByNameSurname", query = "SELECT c FROM Customer c WHERE c.name = :name and c.surname = :surname"),
    @NamedQuery(name = "findCustomerByName",        query = "SELECT c FROM Customer c WHERE c.name = :name"),
    @NamedQuery(name = "findCustomerBySurname",     query = "SELECT c FROM Customer c WHERE c.surname = :surname")
+
 })
 @XmlRootElement
 public class Customer extends User implements Serializable {
@@ -63,7 +65,7 @@ public class Customer extends User implements Serializable {
     public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
-    
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="customer_product", schema="rovobankdb",joinColumns =  @JoinColumn(name="logIn", referencedColumnName="logIn"), 
             inverseJoinColumns = @JoinColumn(name="IDProduct", referencedColumnName="IDProduct"))
