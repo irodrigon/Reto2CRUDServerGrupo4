@@ -42,6 +42,21 @@ public class AccountFacadeREST extends AbstractFacade<Account> {
     public AccountFacadeREST() {
         super(Account.class);
     }
+    
+    @POST
+    @Consumes({"application/xml"})
+    public void createAccount(Account account){
+        LOGGER.log(Level.INFO, "AccountFacadeREST: Creating a new account");
+        try{
+            em.persist(account);
+            LOGGER.log(Level.INFO, "AccountFacadeREST: Account created");
+        }catch(Exception e){
+            LOGGER.log(Level.SEVERE, "AccountFacadeREST: Exception creating account.{0}",
+                    e.getMessage());
+            throw new InternalServerErrorException(e.getMessage());
+        }
+    }
+    
 
    /* @POST
     @Override
@@ -54,13 +69,26 @@ public class AccountFacadeREST extends AbstractFacade<Account> {
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Integer id, Account entity) {
-        super.edit(entity);
+        try{
+            LOGGER.log(Level.INFO, "AccountFacadeREST: Updating account");
+            super.edit(entity);
+        }catch(Exception error){
+            LOGGER.log(Level.SEVERE, "AccountFacadeREST: Exception Updating account IDProduct={0}.{1}", new Object[]{id, error.getMessage()});
+            throw new InternalServerErrorException(error.getMessage());
+        }
+        
     }
 
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Integer id) {
-        super.remove(super.find(id));
+        try{
+            LOGGER.log(Level.INFO, "AccountFacadeREST: Deleting account");
+             super.remove(super.find(id));
+        }catch(Exception error){
+            LOGGER.log(Level.SEVERE, "AccountFacadeREST: Exception deleting account IDProduct={0}.{1}", new Object[]{id, error.getMessage()});
+            throw new InternalServerErrorException(error.getMessage());
+        }
     }
 
     @GET
@@ -178,18 +206,5 @@ public class AccountFacadeREST extends AbstractFacade<Account> {
         return customers;
     }
     
-    @POST
-    @Consumes({"application/xml"})
-    public void createAccount(Account account){
-        LOGGER.log(Level.INFO, "AccountFacadeREST: Creating a new account");
-        try{
-            em.persist(account);
-            LOGGER.log(Level.INFO, "AccountFacadeREST: Account created");
-        }catch(Exception e){
-            LOGGER.log(Level.SEVERE, "UserManager: Exception creating user.{0}",
-                    e.getMessage());
-            throw new InternalServerErrorException(e.getMessage());
-        }
-    }
-    
+
 }
