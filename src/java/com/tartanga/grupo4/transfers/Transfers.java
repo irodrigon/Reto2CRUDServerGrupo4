@@ -28,10 +28,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Alin
  */
 @Entity
-@Table(name="transfer", schema="rovobankDB")
+@Table(name="transfers", schema="rovobankDB")
 @NamedQueries({
-    @NamedQuery(name="findByAll",
-            query="Select t from Transfers t")
+    @NamedQuery(name="findByAll", query="Select t from Transfers t"),
+    @NamedQuery(name="findBySender", query="Select t from Transfers t where t.sender=:sender"),
+    @NamedQuery(name="findByReciever", query="Select t from Transfers t where t.reciever=:reciever"),
+    @NamedQuery(name="findByID", query="Select t from Transfers t where t.transferId=:transferId"),
+    @NamedQuery(name="findByDate", query="Select t from Transfers t where t.transferDate BETWEEN :startDate AND :endDate")
 })
 @XmlRootElement
 public class Transfers implements Serializable {
@@ -46,7 +49,7 @@ public class Transfers implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date transferDate;
     
-    private Integer Amount;
+    private Double Amount;
     
     @Enumerated(EnumType.STRING)
     private Currency currency;
@@ -62,10 +65,10 @@ public class Transfers implements Serializable {
         this.sender="";
         this.reciever="";
         this.transferDate=null;
-        this.Amount=0;
+        this.Amount=0.0;
         this.currency=Currency.EURO;
     }
-    public Transfers(Integer transferId,String sender,String reciever,Date transferDate,Integer Amount,Currency currency){
+    public Transfers(Integer transferId,String sender,String reciever,Date transferDate,Double Amount,Currency currency){
         this.transferId=transferId;
         this.sender=sender;
         this.reciever=reciever;
@@ -106,11 +109,11 @@ public class Transfers implements Serializable {
         this.transferDate = transferDate;
     }
 
-    public Integer getAmount() {
+    public Double getAmount() {
         return Amount;
     }
 
-    public void setAmount(Integer Amount) {
+    public void setAmount(Double Amount) {
         this.Amount = Amount;
     }
 

@@ -6,8 +6,17 @@
  */
 package service;
 
+
+import com.tartanga.grupo4.exceptions.CreateException;
+import com.tartanga.grupo4.accounts.Account;
+import com.tartanga.grupo4.customers.Customer;
+import com.tartanga.grupo4.exceptions.ReadException;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -16,6 +25,8 @@ import javax.persistence.EntityManager;
 public abstract class AbstractFacade<T> {
 
     private Class<T> entityClass;
+
+    private static final Logger LOGGER = Logger.getLogger("javaServer");
 
     public AbstractFacade(Class<T> entityClass) {
         this.entityClass = entityClass;
@@ -61,5 +72,5 @@ public abstract class AbstractFacade<T> {
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-    
+
 }
