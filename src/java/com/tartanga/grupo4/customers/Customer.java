@@ -22,6 +22,8 @@ import javax.persistence.ManyToMany;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -33,6 +35,11 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "customer", schema = "rovobankDB")
+@NamedQueries({
+   @NamedQuery(name = "findCustomerByNameSurname", query = "SELECT c FROM Customer c WHERE c.name = :name and c.surname = :surname"),
+   @NamedQuery(name = "findCustomerByName",        query = "SELECT c FROM Customer c WHERE c.name = :name"),
+   @NamedQuery(name = "findCustomerBySurname",     query = "SELECT c FROM Customer c WHERE c.surname = :surname")
+})
 @XmlRootElement
 public class Customer extends User implements Serializable {
 
@@ -57,8 +64,8 @@ public class Customer extends User implements Serializable {
         this.telephone = telephone;
     }
     
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="customer_product", schema="rovobankdb",joinColumns =  @JoinColumn(name="dni", referencedColumnName="dni"), 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="customer_product", schema="rovobankdb",joinColumns =  @JoinColumn(name="logIn", referencedColumnName="logIn"), 
             inverseJoinColumns = @JoinColumn(name="IDProduct", referencedColumnName="IDProduct"))
     private List<Product> products;
     
@@ -75,7 +82,7 @@ public class Customer extends User implements Serializable {
         this.accounts = accounts;
     }*/
 
-    @XmlTransient
+    @XmlElement
     public List<Product> getProducts() {
         return products;
     }
@@ -87,7 +94,7 @@ public class Customer extends User implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (dni != null ? dni.hashCode() : 0);
+        hash += (logIn != null ? logIn.hashCode() : 0);
         return hash;
     }
 
@@ -98,7 +105,7 @@ public class Customer extends User implements Serializable {
             return false;
         }
         Customer other = (Customer) object;
-        if ((this.dni == null && other.dni != null) || (this.dni != null && !this.dni.equals(other.dni))) {
+        if ((this.logIn == null && other.logIn != null) || (this.logIn != null && !this.logIn.equals(other.logIn))) {
             return false;
         }
         return true;
@@ -106,7 +113,7 @@ public class Customer extends User implements Serializable {
 
     @Override
     public String toString() {
-        return "com.tartanga.grupo4.customers.Customer[ id=" + dni + " ]";
+        return "com.tartanga.grupo4.customers.Customer[ id=" + logIn + " ]";
     }
 
 }

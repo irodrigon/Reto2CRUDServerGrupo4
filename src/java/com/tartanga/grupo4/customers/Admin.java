@@ -33,21 +33,11 @@ public class Admin extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    private Long IDAdmin;
-    
     private String password;
     
     private Boolean active;
     
     public Admin(){}
-
-    public Long getIDAdmin() {
-        return IDAdmin;
-    }
-
-    public void setIDAdmin(Long IDAdmin) {
-        this.IDAdmin = IDAdmin;
-    }
 
     public String getPassword() {
         return password;
@@ -68,7 +58,7 @@ public class Admin extends User implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (IDAdmin != null ? IDAdmin.hashCode() : 0);
+        hash += (logIn != null ? logIn.hashCode() : 0);
         return hash;
     }
 
@@ -79,7 +69,7 @@ public class Admin extends User implements Serializable {
             return false;
         }
         Admin other = (Admin) object;
-        if ((this.IDAdmin == null && other.IDAdmin != null) || (this.IDAdmin != null && !this.IDAdmin.equals(other.IDAdmin))) {
+        if ((this.logIn == null && other.logIn != null) || (this.logIn != null && !this.logIn.equals(other.logIn))) {
             return false;
         }
         return true;
@@ -87,7 +77,7 @@ public class Admin extends User implements Serializable {
 
     @Override
     public String toString() {
-        return "com.tartanga.grupo4.customers.Admin[ id=" + IDAdmin + " ]";
+        return "com.tartanga.grupo4.customers.Admin[ id=" + logIn + " ]";
     }
     
 }
