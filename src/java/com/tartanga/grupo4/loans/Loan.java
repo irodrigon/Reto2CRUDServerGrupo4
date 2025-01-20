@@ -14,9 +14,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "loans", schema = "rovobankdb")
 @NamedQueries({
     @NamedQuery(name = "getBalanceByRemaining", query = "SELECT l FROM Loan l WHERE l.amount > :balance"),
-    @NamedQuery(name = "getLoansByInterestRate", query = "SELECT l FROM Loan l WHERE l.interest = :interestRate"),
-    @NamedQuery(name = "findByDates", query = "SELECT l FROM Loan l WHERE l.startDate >= :startDate AND l.endDate <= :endDate"),
-    @NamedQuery(name = "getByUser", query = "SELECT l FROM Customer l WHERE l.logIn = :logIn")
+    @NamedQuery(name = "getLoansByInterestRate", query = "SELECT l FROM Loan l WHERE l.interest <= :interestRate"),
+    @NamedQuery(name = "findByDates", query = "SELECT l FROM Loan l WHERE l.endDate >= :startDate AND l.endDate <= :endDate"),
 })
 @XmlRootElement
 public class Loan extends Product implements Serializable {

@@ -22,6 +22,8 @@ import javax.persistence.ManyToMany;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -33,6 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "customer", schema = "rovobankDB")
+@NamedQueries({
+    @NamedQuery(name = "getByUser", query = "SELECT l FROM Customer l WHERE l.logIn = :logIn")
+})
 @XmlRootElement
 public class Customer extends User implements Serializable {
 

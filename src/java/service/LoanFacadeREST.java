@@ -5,6 +5,7 @@
  */
 package service;
 
+import com.tartanga.grupo4.customers.Customer;
 import com.tartanga.grupo4.loans.Loan;
 import java.sql.Date;
 import java.util.List;
@@ -149,11 +150,11 @@ public class LoanFacadeREST extends AbstractFacade<Loan> {
     @GET
     @Path("logIn/{logIn}")
     @Produces({"application/xml"})
-    public List <Loan> findByUser(@PathParam("logIn") String logIn){
-      List <Loan> loans = null;
+    public List <Customer> findByUser(@PathParam("logIn") String logIn){
+      List <Customer> loans = null;
       try{
          LOGGER.log(Level.INFO, "LoanFacadeREST: Getting loans which user is {0}", logIn);
-         loans =  em.createNamedQuery("getLoanByUser", Loan.class).setParameter("logIn",logIn).getResultList();
+         loans =  em.createNamedQuery("getByUser", Customer.class).setParameter("logIn",logIn).getResultList();
       }catch(Exception e){
           
           LOGGER.log(Level.SEVERE, "LoanFacadeREST: Failed getting loans which user is {0}", logIn);
