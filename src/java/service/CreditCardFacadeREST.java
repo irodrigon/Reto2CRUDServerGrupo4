@@ -169,4 +169,17 @@ public class CreditCardFacadeREST extends AbstractFacade<CreditCard> {
         
         return creditCardData;
     }
+    
+    @DELETE
+    @Path("deleteByCardNumber/{creditCardNumber}")
+    public void deleteCreditCardByCardNumber(@PathParam("creditCardNumber") Long creditCardNumber) {
+          try {
+            logger.log(Level.INFO, "CreditCardFacadeREST: Deleting credit card {0}.", creditCardNumber);
+            em.createNamedQuery("deleteCreditCardByCardNumber").setParameter("creditCardNumber", creditCardNumber).executeUpdate();
+          }catch(Exception ex){
+            logger.log(Level.SEVERE, "CreditCardFacadeREST: Exception deleting credit card: {0}", ex.getMessage());
+            throw new InternalServerErrorException("Credit card deleting failed: " + ex.getMessage());
+        }
+          
+    }
 }

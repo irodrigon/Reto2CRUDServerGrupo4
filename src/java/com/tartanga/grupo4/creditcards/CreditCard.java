@@ -41,6 +41,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(
             name="findCreditCardByExpirationDate",
             query="SELECT c FROM CreditCard c WHERE c.expirationDate BETWEEN :startDate AND :endDate"
+    ),
+    @NamedQuery(
+            name="deleteCreditCardByCardNumber",
+            query="DELETE FROM CreditCard c WHERE c.creditCardNumber = :creditCardNumber"
     )
 })
 @XmlRootElement

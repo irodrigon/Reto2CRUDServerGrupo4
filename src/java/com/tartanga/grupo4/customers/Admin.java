@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     ),
     @NamedQuery(
             name="countAdminByLogin",
-            query="SELECT a FROM Admin a WHERE (SELECT COUNT(a) FROM Admin a WHERE logIn = :logIn) > 0"
+            query="SELECT a FROM Admin a WHERE a.logIn = :logIn"
     )
 })
 @XmlRootElement

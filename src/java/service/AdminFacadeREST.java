@@ -21,6 +21,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -106,7 +107,7 @@ public class AdminFacadeREST extends AbstractFacade<Admin> {
             admin = (Admin) em.createNamedQuery("findAdminByCredentials").setParameter("logIn",logIn).setParameter("password",password).getSingleResult();
         }catch(Exception e){
             logger.log(Level.SEVERE, "AdminFacadeREST: Exception reading data by logIn and password: ", e.getMessage());
-            throw new ReadException(e.getMessage());
+            throw new NotAuthorizedException(e.getMessage());
         }
         
         return admin;

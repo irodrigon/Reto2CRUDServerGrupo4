@@ -20,6 +20,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -48,7 +50,10 @@ public class Product implements Serializable {
     @Temporal(TemporalType.DATE)
     protected Date creationDate;
     
-    @ManyToMany(mappedBy="products", fetch = FetchType.EAGER)
+    
+    @ManyToMany( fetch = FetchType.EAGER)
+    @JoinTable(name="customer_product", schema="rovobankdb",joinColumns =  @JoinColumn(name="IDProduct", referencedColumnName="IDProduct"), 
+            inverseJoinColumns = @JoinColumn(name="logIn", referencedColumnName="logIn"))
     protected List<Customer> customers;
     
     public Product(){

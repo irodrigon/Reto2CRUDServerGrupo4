@@ -66,9 +66,7 @@ public class Customer extends User implements Serializable {
         this.telephone = telephone;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="customer_product", schema="rovobankdb",joinColumns =  @JoinColumn(name="logIn", referencedColumnName="logIn"), 
-            inverseJoinColumns = @JoinColumn(name="IDProduct", referencedColumnName="IDProduct"))
+    @ManyToMany(mappedBy="customers",fetch = FetchType.EAGER)
     private List<Product> products;
     
 
