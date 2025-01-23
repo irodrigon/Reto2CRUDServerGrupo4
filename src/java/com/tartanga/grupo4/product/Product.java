@@ -76,7 +76,7 @@ public class Product implements Serializable {
         this.creationDate = creationDate;
     }
 
-    @XmlTransient
+    @XmlElement
     public List<Customer> getCustomers() {
         return customers;
     }
