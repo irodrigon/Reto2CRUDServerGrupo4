@@ -9,6 +9,7 @@ import com.tartanga.grupo4.creditcards.CreditCard;
 import com.tartanga.grupo4.customers.Admin;
 import com.tartanga.grupo4.exceptions.CreateException;
 import com.tartanga.grupo4.exceptions.ReadException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import security.Hash;
 
 /**
  *
@@ -37,7 +39,7 @@ import javax.ws.rs.core.MediaType;
 @Path("com.tartanga.grupo4.customers.admin")
 public class AdminFacadeREST extends AbstractFacade<Admin> {
     
-    
+    private Hash security = new Hash();
     private static final Logger logger = Logger.getLogger(AdminFacadeREST.class.getName());
 
     @PersistenceContext(unitName = "Reto2CRUDServerGrupo4PU")
@@ -51,6 +53,13 @@ public class AdminFacadeREST extends AbstractFacade<Admin> {
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Admin entity) {
+         try {    
+            String hash = security.passwordToHash(entity.getPassword());
+            entity.setPassword(hash);
+        } catch (NoSuchAlgorithmException error) {
+           logger.log(Level.SEVERE, "RovoBankSignUpController: Exception while creating Hash, {0}", error.getMessage());      
+           throw new InternalServerErrorException();
+        }
         super.create(entity);
     }
 
