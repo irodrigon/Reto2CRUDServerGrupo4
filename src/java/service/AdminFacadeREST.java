@@ -52,11 +52,11 @@ import security.Hash;
 @Path("com.tartanga.grupo4.customers.admin")
 public class AdminFacadeREST extends AbstractFacade<Admin> {
 
-       static {
-       //Poner BouncyCastle como provider
+    static {
+        //Poner BouncyCastle como provider
         Security.addProvider(new BouncyCastleProvider());
     }
-    
+
     private Hash security = new Hash();
     private static final Logger logger = Logger.getLogger(AdminFacadeREST.class.getName());
 
@@ -72,7 +72,8 @@ public class AdminFacadeREST extends AbstractFacade<Admin> {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(Admin entity) {
         try {
-            String hash = security.passwordToHash(entity.getPassword());
+            String password = desencriptar(entity.getPassword());
+            String hash = security.passwordToHash(password);
             entity.setPassword(hash);
         } catch (NoSuchAlgorithmException error) {
             logger.log(Level.SEVERE, "RovoBankSignUpController: Exception while creating Hash, {0}", error.getMessage());
@@ -130,42 +131,42 @@ public class AdminFacadeREST extends AbstractFacade<Admin> {
         Admin admin = new Admin();
         try {
             //Recuperar llave del fichero
-            //FileInputStream input = new FileInputStream(Paths.get("src/security", "Private.key").toFile());
-            InputStream input = AdminFacadeREST.class.getResourceAsStream("security/Private.key");
+
+           /* InputStream input = AdminFacadeREST.class.getClassLoader().getResourceAsStream("security/Private.key");
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             byte[] data = new byte[1024];
             int bytesRead;
-            
-            while((bytesRead = input.read(data))!=-1){
-                buffer.write(data,0,bytesRead);
+
+            while ((bytesRead = input.read(data)) != -1) {
+                buffer.write(data, 0, bytesRead);
             }
             input.close();
-            
+
             byte[] privateKeyBytes = buffer.toByteArray();
-            
+
             //Recontruir la llave privada
             PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(privateKeyBytes);
-            KeyFactory keyFactory = KeyFactory.getInstance("EC","BC");
+            KeyFactory keyFactory = KeyFactory.getInstance("EC", "BC");
             PrivateKey privateKey = keyFactory.generatePrivate(spec);
-            
+
             //Deconvertirlo de BASE64
-              byte[] encryptedPass = UrlBase64.decode(password);
-        //    byte[] encryptedPass = Base64.getDecoder().decode(password);
-            
+            byte[] encryptedPass = UrlBase64.decode(password);
+            //    byte[] encryptedPass = Base64.getDecoder().decode(password);
+
             //Desencriptar la password
-            Cipher cipher = Cipher.getInstance("ECIES","BC");
+            Cipher cipher = Cipher.getInstance("ECIES", "BC");
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
             byte[] decriptedPass = cipher.doFinal(encryptedPass);
-            password = new String(decriptedPass);
+            password = new String(decriptedPass);*/
            
-           
+            password = desencriptar(password);
+            
             //Hashear el password 
             String hash = security.passwordToHash(password);
             password = hash;
             logger.log(Level.INFO, "AdminFacadeREST: Searching data by logIn and password.");
             admin = (Admin) em.createNamedQuery("findAdminByCredentials").setParameter("logIn", logIn).setParameter("password", password).getSingleResult();
 
-            
         } catch (NoSuchAlgorithmException error) {
             logger.log(Level.SEVERE, "RovoBankSignUpController: Exception while creating Hash, {0}", error.getMessage());
             throw new InternalServerErrorException();
@@ -198,6 +199,44 @@ public class AdminFacadeREST extends AbstractFacade<Admin> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+
+    private String desencriptar(String password) {
+        try {
+            InputStream input = AdminFacadeREST.class.getClassLoader().getResourceAsStream("security/Private.key");
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            byte[] data = new byte[1024];
+            int bytesRead;
+
+            while ((bytesRead = input.read(data)) != -1) {
+                buffer.write(data, 0, bytesRead);
+            }
+            input.close();
+
+            byte[] privateKeyBytes = buffer.toByteArray();
+
+            //Recontruir la llave privada
+            PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(privateKeyBytes);
+            KeyFactory keyFactory = KeyFactory.getInstance("EC", "BC");
+            PrivateKey privateKey = keyFactory.generatePrivate(spec);
+
+            //Deconvertirlo de BASE64
+            byte[] encryptedPass = UrlBase64.decode(password);
+            //    byte[] encryptedPass = Base64.getDecoder().decode(password);
+
+            //Desencriptar la password
+            Cipher cipher = Cipher.getInstance("ECIES", "BC");
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+            byte[] decriptedPass = cipher.doFinal(encryptedPass);
+            password = new String(decriptedPass);
+
+            
+        } catch (Exception error) {
+            logger.log(Level.SEVERE, "AdminFacadeREST: Exception while decripting the password: ", error.getMessage());
+             throw new InternalServerErrorException();
+        }
+        return password;
+
     }
 
 }
