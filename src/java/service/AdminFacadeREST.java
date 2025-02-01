@@ -12,6 +12,7 @@ import com.tartanga.grupo4.exceptions.ReadException;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -86,7 +87,16 @@ public class AdminFacadeREST extends AbstractFacade<Admin> {
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") String id, Admin entity) {
-        super.edit(entity);
+        try {
+            String password = desencriptar( entity.getPassword());
+            String hash = security.passwordToHash(password);
+            entity.setPassword(hash);
+            super.edit(entity);
+        } catch (Exception error) {
+            logger.log(Level.SEVERE, "RovoBankSignUpController: Exception while updating the user, {0}", error.getMessage());
+            throw new InternalServerErrorException();
+        }
+
     }
 
     @DELETE
@@ -99,7 +109,15 @@ public class AdminFacadeREST extends AbstractFacade<Admin> {
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Admin find(@PathParam("id") String id) {
-        return super.find(id);
+        Admin admin = new Admin();
+        try {
+            admin = super.find(id);
+        } catch (Exception error) {
+            logger.log(Level.SEVERE, "AdminFacadeREST: Exception getting admin by logIn: {0}: ", error.getMessage());
+            throw new NotAuthorizedException(error.getMessage());
+        }
+
+        return admin;
     }
 
     @GET
@@ -130,39 +148,10 @@ public class AdminFacadeREST extends AbstractFacade<Admin> {
 
         Admin admin = new Admin();
         try {
-            //Recuperar llave del fichero
-
-           /* InputStream input = AdminFacadeREST.class.getClassLoader().getResourceAsStream("security/Private.key");
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            byte[] data = new byte[1024];
-            int bytesRead;
-
-            while ((bytesRead = input.read(data)) != -1) {
-                buffer.write(data, 0, bytesRead);
-            }
-            input.close();
-
-            byte[] privateKeyBytes = buffer.toByteArray();
-
-            //Recontruir la llave privada
-            PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(privateKeyBytes);
-            KeyFactory keyFactory = KeyFactory.getInstance("EC", "BC");
-            PrivateKey privateKey = keyFactory.generatePrivate(spec);
-
-            //Deconvertirlo de BASE64
-            byte[] encryptedPass = UrlBase64.decode(password);
-            //    byte[] encryptedPass = Base64.getDecoder().decode(password);
-
-            //Desencriptar la password
-            Cipher cipher = Cipher.getInstance("ECIES", "BC");
-            cipher.init(Cipher.DECRYPT_MODE, privateKey);
-            byte[] decriptedPass = cipher.doFinal(encryptedPass);
-            password = new String(decriptedPass);*/
-           
             password = desencriptar(password);
-            
             //Hashear el password 
             String hash = security.passwordToHash(password);
+
             password = hash;
             logger.log(Level.INFO, "AdminFacadeREST: Searching data by logIn and password.");
             admin = (Admin) em.createNamedQuery("findAdminByCredentials").setParameter("logIn", logIn).setParameter("password", password).getSingleResult();
@@ -203,6 +192,7 @@ public class AdminFacadeREST extends AbstractFacade<Admin> {
 
     private String desencriptar(String password) {
         try {
+
             InputStream input = AdminFacadeREST.class.getClassLoader().getResourceAsStream("security/Private.key");
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             byte[] data = new byte[1024];
@@ -222,18 +212,16 @@ public class AdminFacadeREST extends AbstractFacade<Admin> {
 
             //Deconvertirlo de BASE64
             byte[] encryptedPass = UrlBase64.decode(password);
-            //    byte[] encryptedPass = Base64.getDecoder().decode(password);
 
             //Desencriptar la password
             Cipher cipher = Cipher.getInstance("ECIES", "BC");
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
             byte[] decriptedPass = cipher.doFinal(encryptedPass);
             password = new String(decriptedPass);
-
-            
         } catch (Exception error) {
+            //error.printStackTrace();
             logger.log(Level.SEVERE, "AdminFacadeREST: Exception while decripting the password: ", error.getMessage());
-             throw new InternalServerErrorException();
+            throw new InternalServerErrorException();
         }
         return password;
 
