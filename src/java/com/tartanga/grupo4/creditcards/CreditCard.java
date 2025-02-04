@@ -13,6 +13,7 @@ import java.util.List;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -20,6 +21,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -68,7 +70,7 @@ public class CreditCard extends Product implements Serializable {
     @ManyToOne
     private Account account;
     
-    @OneToMany(cascade=ALL, mappedBy="creditCard")
+    @OneToMany(cascade=ALL, mappedBy="creditCard",fetch = FetchType.EAGER)
     private List<Movement> movementList;
     
     public CreditCard(){
@@ -115,7 +117,7 @@ public class CreditCard extends Product implements Serializable {
         this.account = account;
     }
 
-    @XmlTransient
+    @XmlElement
     public List<Movement> getMovementList() {
         return movementList;
     }

@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -78,7 +79,8 @@ public class Movement implements Serializable {
     public void setCurrency(Currency currency) {
         this.currency = currency;
     }
-
+    
+    @XmlTransient
     public CreditCard getCreditCard() {
         return creditCard;
     }
