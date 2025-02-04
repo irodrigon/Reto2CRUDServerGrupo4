@@ -82,11 +82,11 @@ public class Customer extends User implements Serializable {
         this.accounts = accounts;
     }*/
 
-    @XmlTransient
+    
     public List<Product> getProducts() {
         return products;
     }
-
+    @XmlTransient
     public void setProducts(List<Product> products) {
         this.products = products;
     }
